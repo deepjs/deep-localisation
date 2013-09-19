@@ -1,12 +1,3 @@
-var view = {
-	localisation : "translate::smart-common/smartbar/json/nl",
-	//ce qui veut dire 
-
-};
-
-
-
-
 if(typeof define !== 'function')
 	var define = require('amdefine')(module);
 
