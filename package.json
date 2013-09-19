@@ -1,0 +1,19 @@
+{
+  "name": "deep-localisation",
+  "version": "0.1.0",
+  "author": "Philippe Delabye",
+  "description": "string localisation protocole for deepJS",
+  "contributors" :[
+  	{"name":"Gilles Coomans", "email":"gilles.coomans@gmail.com"}
+  ],
+  "licenses": [
+  ],
+  "repository": {
+    "type":"git",
+    "url":"ssh://git@dev.ubik.be/deep-localisation"
+  },
+  "dependencies": {
+    "deep":"git+ssh://git@dev.ubik.be/deep#0.3.9.1"
+  },
+  "main": "./index.js"
+}
