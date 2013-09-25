@@ -11,8 +11,8 @@ define(["require","deep/deep"],function (require, deep)
 
   }
 
-	var filter = function (root, language, wrap, localID) {
-	
+	var filter = function (root, language, wrap, originPath) {
+	 console.log("filter trans : ", root, language, wrap, originPath);
 	   var res = {};
        var current = null;
        var stack = [{ value:root, cur:res, path:"/" }];
@@ -48,7 +48,10 @@ define(["require","deep/deep"],function (require, deep)
                         
                    var va = v[i];
                    if(typeof va[language] === 'string')
-                        currentRes[i] = wrap?wrap(va[language], localID+current.path+i ):va[language];
+                   {
+                        console.log("Do we have Wrap() ?????????? ", wrap);
+                        currentRes[i] = wrap?wrap(va[language], originPath, current.path+i ):va[language];
+                   }
                    else if(typeof va == "object")
                     {
                         if(va.push)
@@ -66,12 +69,15 @@ define(["require","deep/deep"],function (require, deep)
        }
        return res;
    }
-	deep.protocoles.translate.options = null;
+  deep.protocoles.translate.options = null;
+	deep.protocoles.translate.stock = {};
 
 	
 	deep.protocoles.translate.get = function (id, opt) {
+
+
 		var options = deep.protocoles.translate.options || {};
-      
+
     if(options && options._deep_ocm_)
         options = options();
 
@@ -88,15 +94,20 @@ define(["require","deep/deep"],function (require, deep)
 		//console.log("swig store : ", id, options)
     //console.log("tranlate options : ", options.language());
       
+
+    var parsedPath = id.split(" ");
+    var key = parsedPath.shift();
+    id = parsedPath.shift();
+
+
 		if(options.cache !== false && deep.mediaCache.cache["translate-" + lang + "::" +id])
 			return deep(deep.mediaCache.cache["translate-" + lang + "::" +id]).store(this);
 		var self = this;
 		var d = deep("json::" + id)
 		.done(function (data) {
 			//prendre la langue
-      var localID = "src-"+new Date().valueOf()+"::";
-      deep.protocoles.translate.map[localID] = id;
-			var resi = filter(data, lang, options.wrap, localID);
+			var resi = filter(data, lang, options.wrap, id);
+      deep.protocoles.translate.stock[key] = resi;
 			//console.log("translate store : resi ", resi);
 			delete deep.mediaCache.cache["translate-" + lang + "::"+id];
 			if((options && options.cache !== false)  || (self.options && self.options.cache !== false))
