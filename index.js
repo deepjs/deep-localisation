@@ -12,7 +12,7 @@ define(["require","deep/deep"],function (require, deep)
   }
 
 	var filter = function (root, language, wrap, originPath) {
-	 console.log("filter trans : ", root, language, wrap, originPath);
+	   //console.log("filter trans : ", root, language, wrap, originPath);
 	   var res = {};
        var current = null;
        var stack = [{ value:root, cur:res, path:"/" }];
@@ -49,8 +49,8 @@ define(["require","deep/deep"],function (require, deep)
                    var va = v[i];
                    if(typeof va[language] === 'string')
                    {
-                        console.log("Do we have Wrap() ?????????? ", wrap);
-                        currentRes[i] = wrap?wrap(va[language], originPath, current.path+i ):va[language];
+                        //console.log("Do we have Wrap() ?????????? ", wrap);
+                      currentRes[i] = wrap?wrap(va[language], current.path+i, originPath ):va[language];
                    }
                    else if(typeof va == "object")
                     {
@@ -73,9 +73,8 @@ define(["require","deep/deep"],function (require, deep)
 	deep.protocoles.translate.stock = {};
 
 	
-	deep.protocoles.translate.get = function (id, opt) {
-
-
+	deep.protocoles.translate.get = function (id, opt)
+  {
 		var options = deep.protocoles.translate.options || {};
 
     if(options && options._deep_ocm_)
@@ -91,35 +90,38 @@ define(["require","deep/deep"],function (require, deep)
     }
 		if(!lang)
 			return deep.errors.Protocole("No language available for translate protocole (get)");
-		//console.log("swig store : ", id, options)
-    //console.log("tranlate options : ", options.language());
-      
 
     var parsedPath = id.split(" ");
-    var key = parsedPath.shift();
+    var key = null;
     id = parsedPath.shift();
+    if(parsedPath.length == 1)
+      key = parsedPath.shift();
 
-
-		if(options.cache !== false && deep.mediaCache.cache["translate-" + lang + "::" +id])
-			return deep(deep.mediaCache.cache["translate-" + lang + "::" +id]).store(this);
+    var cacheName = "translate-" + lang + "::" +id;
+		if(options.cache !== false && deep.mediaCache.cache[cacheName])
+		{
+      var cached = deep.mediaCache.cache[cacheName];
+      return cached.then(function(success){
+          if(key)
+            deep.protocoles.translate.stock[key] = success;
+      });
+    } 
 		var self = this;
-		var d = deep("json::" + id)
+		var d = deep.when(deep.get("json::" + id))
 		.done(function (data) {
-			//prendre la langue
+      var ok = deep.Querier.firstObjectWithProperty(data, lang);
+      if(!ok)
+        console.error( "current language not found in translation file : "+id+". Please update it for : ", lang );
 			var resi = filter(data, lang, options.wrap, id);
-      deep.protocoles.translate.stock[key] = resi;
-			//console.log("translate store : resi ", resi);
-			delete deep.mediaCache.cache["translate-" + lang + "::"+id];
-			if((options && options.cache !== false)  || (self.options && self.options.cache !== false))
-				deep.mediaCache.manage(resi, "translate-" + lang + "::" +id);
+      if(key)
+        deep.protocoles.translate.stock[key] = resi;
 			return resi;
-		})
-		.store(this);
-		if((options && options.cache !== false)  || (self.options && self.options.cache !== false))
-			deep.mediaCache.manage(d, "translate-" + lang + "::" +id);
+		});
+		if((options && options.cache !== false)  || (options && options.cache !== false))
+			deep.mediaCache.manage(d, cacheName);
 		return d;
 	};
-
+/*
   deep.protocoles.translate.patch = function (value, options) {
     var options = deep.protocoles.translate.options || {};
       
@@ -159,6 +161,7 @@ define(["require","deep/deep"],function (require, deep)
       deep.mediaCache.manage(d, "translate-" + lang + "::" +id);
     return d;
   };
+  */
 	
 	return function (opt) {
 		//console.log("Options in tranlsate protocole = ", opt);
