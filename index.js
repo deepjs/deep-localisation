@@ -12,7 +12,7 @@ define(["require","deep/deep"],function (require, deep)
   }
 
 	var filter = function (root, language, wrap, originPath) {
-	   //console.log("filter trans : ", root, language, wrap, originPath);
+	   // console.log("filter trans : ", root, language, wrap, originPath);
 	   var res = {};
        var current = null;
        var stack = [{ value:root, cur:res, path:"/" }];
@@ -112,9 +112,12 @@ define(["require","deep/deep"],function (require, deep)
       var ok = deep.Querier.firstObjectWithProperty(data, lang);
       if(!ok)
         console.error( "current language not found in translation file : "+id+". Please update it for : ", lang );
-			var resi = filter(data, lang, options.wrap, id);
+			
+      var resi = filter(data, lang, options.wrap, id);
       if(key)
         deep.protocoles.translate.stock[key] = resi;
+      // console.log("translation resi : ", resi);
+
 			return resi;
 		});
 		if((options && options.cache !== false)  || (options && options.cache !== false))
