@@ -4,13 +4,14 @@
   "author": "Philippe Delabye",
   "description": "string localisation protocole for deepJS",
   "contributors" :[
+  	{"name":"Philippe Delabye", "email":"phil@chemicalrules.net"}
   	{"name":"Gilles Coomans", "email":"gilles.coomans@gmail.com"}
   ],
   "licenses": [
   ],
   "repository": {
     "type":"git",
-    "url":"git@github.com:philid/deep-localisation.git"
+    "url":"git@github.com:deepjs/deep-localisation.git"
   },
   "main": "./index.js"
 }
