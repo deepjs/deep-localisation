@@ -6,8 +6,35 @@ define(["require","deepjs/deep"],function (require, deep)
 	var deep = require("deepjs/deep");
 	//__________________________________________________
 	deep.protocoles.translate = new deep.Store();
+	deep.protocoles.localisation = new deep.Store();
+	
+	// deep.protocoles.translate.map = {
+	// };
 
-	deep.protocoles.translate.map = {
+	deep.protocoles.localisation.options = {};
+	deep.protocoles.localisation.get = function (id)
+	{
+		var options = deep.protocoles.localisation.options || {};
+		//console.log("Getting localisation file Language = ", options.language);
+		var lang = null;
+		if(options)
+		{
+			if(options.language)
+				lang = options.language;
+		}
+		if(!lang)
+			return deep.errors.Protocole("No language setted for localisation protocole (get)");
+
+		console.log("Getting localisation file for module : ", id, " Language = ", lang);
+		return deep.when(deep.get("json::" + id + lang + ".json"))
+		.done(function (data) {
+			//console.log("localisation result  : ", data);
+			return data;
+		})
+		.fail(function (err) {
+			return deep.errors.Protocole("No file loaded for localisation protocole (get)");
+		});
+
 	};
 
 	var filter = function (root, language, wrap, originPath) {
