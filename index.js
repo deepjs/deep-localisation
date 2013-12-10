@@ -29,7 +29,11 @@ define(["require","deepjs/deep"],function (require, deep)
 		return deep.when(deep.get("json::" + id + lang + ".json"))
 		.done(function (data) {
 			//console.log("localisation result  : ", data);
-			return data;
+			return deep(data)
+			.flatten()
+			.done(function (flattendData) {
+				return flattendData;
+			});
 		})
 		.fail(function (err) {
 			return deep.errors.Protocole("No file loaded for localisation protocole (get)");
