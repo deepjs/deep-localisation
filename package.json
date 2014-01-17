@@ -4,7 +4,7 @@
   "author": "Philippe Delabye",
   "description": "string localisation protocole for deepJS",
   "contributors" :[
-  	{"name":"Philippe Delabye", "email":"phil@chemicalrules.net"}
+  	{"name":"Philippe Delabye", "email":"phil@chemicalrules.net"},
   	{"name":"Gilles Coomans", "email":"gilles.coomans@gmail.com"}
   ],
   "licenses": [
