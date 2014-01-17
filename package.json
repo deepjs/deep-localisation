@@ -1,6 +1,6 @@
 {
   "name": "deep-localisation",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "author": "Philippe Delabye",
   "description": "string localisation protocole for deepJS",
   "contributors" :[
