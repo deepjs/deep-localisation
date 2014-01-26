@@ -5,16 +5,16 @@ define(["require","deepjs/deep"],function (require, deep)
 {
 	var deep = require("deepjs/deep");
 	//__________________________________________________
-	deep.protocoles.translate = new deep.Store();
-	deep.protocoles.localisation = new deep.Store();
+	deep.protocols.translate = new deep.Store();
+	deep.protocols.localisation = new deep.Store();
 	
-	// deep.protocoles.translate.map = {
-	// };
 
-	deep.protocoles.localisation.options = {};
-	deep.protocoles.localisation.get = function (id)
+	// deep.protocols.translate.map = {};
+
+	deep.protocols.localisation.options = {};
+	deep.protocols.localisation.get = function (id)
 	{
-		var options = deep.protocoles.localisation.options || {};
+		var options = deep.protocols.localisation.options || {};
 		//console.log("Getting localisation file Language = ", options.language);
 		var lang = null;
 		if(options)
@@ -23,20 +23,13 @@ define(["require","deepjs/deep"],function (require, deep)
 				lang = options.language;
 		}
 		if(!lang)
-			return deep.errors.Protocole("No language setted for localisation protocole (get)");
+			return deep.errors.Protocole("No language setted for localisation protocol (get)");
 
 		console.log("Getting localisation file for module : ", id, " Language = ", lang);
-		return deep.when(deep.get("json::" + id + lang + ".json"))
-		.done(function (data) {
-			//console.log("localisation result  : ", data);
-			return deep(data)
-			.flatten()
-			.done(function (flattendData) {
-				return flattendData;
-			});
-		})
+		return deep("json::" + id + lang + ".json")
+		.flatten()
 		.fail(function (err) {
-			return deep.errors.Protocole("No file loaded for localisation protocole (get)");
+			return deep.errors.Protocole("No file loaded for localisation protocol (get)");
 		});
 
 	};
@@ -72,9 +65,6 @@ define(["require","deepjs/deep"],function (require, deep)
 			else
 				for(var i in v)
 				{
-					if(i == "_deep_entry")
-						continue;
-
 					var va = v[i];
 					if(typeof va[language] === 'string')
 					{
@@ -95,16 +85,15 @@ define(["require","deepjs/deep"],function (require, deep)
 				stack = stack.concat(r);
 				//console.log("stack : ", stack)
 		}
-
 		return res;
 	};
 
-	deep.protocoles.translate.options = null;
-	deep.protocoles.translate.stock = {};
+	deep.protocols.translate.options = null;
+	deep.protocols.translate.stock = {};
 
-	deep.protocoles.translate.get = function (id, opt)
+	deep.protocols.translate.get = function (id, opt)
 	{
-		var options = deep.protocoles.translate.options || {};
+		var options = deep.protocols.translate.options || {};
 
 		if(options && options._deep_ocm_)
 			options = options();
@@ -118,7 +107,7 @@ define(["require","deepjs/deep"],function (require, deep)
 				lang = options.defaultLanguage;
 		}
 		if(!lang)
-			return deep.errors.Protocole("No language available for translate protocole (get)");
+			return deep.errors.Protocole("No language available for translate protocol (get)");
 
 		var parsedPath = id.split(" ");
 		var key = null;
@@ -132,7 +121,7 @@ define(["require","deepjs/deep"],function (require, deep)
 			var cached = deep.mediaCache.cache[cacheName];
 			return cached.then(function(success){
 			if(key)
-				deep.protocoles.translate.stock[key] = success;
+				deep.protocols.translate.stock[key] = success;
 			});
 		}
 		var self = this;
@@ -144,7 +133,7 @@ define(["require","deepjs/deep"],function (require, deep)
 
 			var resi = filter(data, lang, options.wrap, id);
 			if(key)
-				deep.protocoles.translate.stock[key] = resi;
+				deep.protocols.translate.stock[key] = resi;
 			// console.log("translation resi : ", resi);
 			return resi;
 		});
@@ -153,13 +142,13 @@ define(["require","deepjs/deep"],function (require, deep)
 		return d;
 	};
 	/*
-	deep.protocoles.translate.patch = function (value, options) {
+	deep.protocols.translate.patch = function (value, options) {
 		//TODO
 	};
 	*/
 
 	return function (opt) {
-		//console.log("Options in tranlsate protocole = ", opt);
-		deep.protocoles.translate.options = opt || {};
+		//console.log("Options in tranlsate protocol = ", opt);
+		deep.protocols.translate.options = opt || {};
 	};
 });
