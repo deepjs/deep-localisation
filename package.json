@@ -1,17 +1,24 @@
 {
   "name": "deep-localisation",
-  "version": "0.1.2",
-  "author": "Philippe Delabye",
-  "description": "string localisation protocol for deepJS",
-  "contributors" :[
-  	{"name":"Philippe Delabye", "email":"phil@chemicalrules.net"},
-  	{"name":"Gilles Coomans", "email":"gilles.coomans@gmail.com"}
-  ],
+  "description":"string localisation protocol for deepJS",
+  "author":"Philippe Delabye <phil@chemicalrules.net>", 
+  "version": "0.1.3",
+  "contributors": ["Philippe Delabye <phil@chemicalrules.net>"],
   "licenses": [
+    {
+         "type": "LGPLv3.0",
+         "url": "http://www.gnu.org/licenses/lgpl-3.0.txt"
+     }
   ],
   "repository": {
-    "type":"git",
-    "url":"git@github.com:deepjs/deep-localisation.git"
+    "type": "git",
+    "url": "https://github.com/deepjs/deep-localisation.git"
   },
-  "main": "./index.js"
+  "dependencies": {
+  },
+  "mappings":{
+  },
+  "engine":{
+    "node" : ">=0.10.0" 
+  }
 }
