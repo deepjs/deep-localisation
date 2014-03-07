@@ -1,9 +1,8 @@
 if(typeof define !== 'function')
 	var define = require('amdefine')(module);
 
-define(["require","deepjs/deep"],function (require, deep)
+define(["require", "deepjs/deep", "deepjs/lib/stores/cache" ],function (require, deep)
 {
-	var deep = require("deepjs/deep");
 	//__________________________________________________
 	deep.protocols.translate = new deep.Store();
 	deep.protocols.localisation = new deep.Store();
